@@ -71,6 +71,28 @@ public class DBAdapter {
         return values;
     }*/
 
+    public ArrayList<ModelPatients> getAllPatients() {
+
+        open();
+        ArrayList<ModelPatients> values = new ArrayList<>();
+        Cursor result = mDb.query(false, "patient",
+                new String[]{"name", "age", "disease"}, null, null, null, null, null, null);
+
+        if (result.moveToFirst()) {
+            do {
+                ModelPatients patientRow = new ModelPatients();
+                patientRow.setName(result.getString(result.getColumnIndex("name")));
+                patientRow.setAge(result.getString(result.getColumnIndex("age")));
+                patientRow.setDisease(result.getString(result.getColumnIndex("disease")));
+                values.add(patientRow);
+            } while (result.moveToNext());
+        } else {
+            return null;
+        }
+        close();
+        return values;
+    }
+
 
 
 
@@ -81,7 +103,7 @@ public class DBAdapter {
         ArrayList<String> values = new ArrayList<>();
         Cursor result = mDb.query(false, "patient",
                 new String[]{"name"}, null, null, null, null, null, null);
-        //int[] drawables = {R.drawable.family,R.drawable.reason,R.drawable.benefits,R.drawable.sexstudy,R.drawable.birthcontrol,R.drawable.pregnant,R.drawable.babycare};
+
         if (result.moveToFirst()) {
             do {
                 values.add(result.getString(result.getColumnIndex("name")));
@@ -93,44 +115,6 @@ public class DBAdapter {
         return values;
     }
 
-    public ArrayList<String> getAllDescription() {
-        open();
-        ArrayList<String> values = new ArrayList<String>();
-        Cursor result = mDb.query(false, "Information",
-                new String[]{"details"}, null, null, null, null, null, null);
 
-        if (result.moveToFirst()) {
-            do {
-                values.add(result.getString(result.getColumnIndex("details")));
-
-                Log.e("DATABASE--textDetails", "" + result.getString(result.getColumnIndex("details")));
-
-            } while (result.moveToNext());
-        } else {
-            return null;
-        }
-        close();
-        return values;
-    }
-
-    public ArrayList<String> getAllImage() {
-        open();
-        ArrayList<String> values = new ArrayList<String>();
-        Cursor result = mDb.query(false, "Information",
-                new String[]{"image_name"}, null,null, null, null, null, null);
-
-        if (result.moveToFirst()) {
-            do {
-                values.add(result.getString(result.getColumnIndex("image_name")));
-
-                Log.e("DATABASE--Image", "" + result.getString(result.getColumnIndex("image_name")));
-
-            } while (result.moveToNext());
-        } else {
-            return null;
-        }
-        close();
-        return values;
-    }
 
 }

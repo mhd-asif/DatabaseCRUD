@@ -1,5 +1,6 @@
 package com.example.asif.databasecrud;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     private static String TAG = "DataBaseHelper"; // Tag just for the LogCat window
@@ -46,15 +48,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 throw new Error("ErrorCopyingDataBase");
             }
         } else {
-            copyDataBase();
-            Log.e(TAG, "createDatabase database created on else");
+            Log.e(TAG, "createDatabase: Database already exists!");
         }
     }
 
     //Check that the database exists here: /data/data/your package/databases/Da Name
     private boolean checkDataBase() {
         File dbFile = new File(DB_PATH + DB_NAME);
-        Log.v("dbFile", dbFile + "   " + dbFile.exists());
+        Log.e("dbFile", dbFile + "   " + dbFile.exists());
         return dbFile.exists();
     }
 
@@ -81,6 +82,43 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         //mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS);
         return mDataBase != null;
     }
+
+    /****************************************************************************************************/
+    public void insertPatient(HashMap<String, String> queryValues) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("name", queryValues.get("name"));
+        values.put("age", Integer.parseInt(queryValues.get("age")));
+        values.put("disease", queryValues.get("disease"));
+
+        long rowID = database.insert("patient", null, values);
+        Log.e("Row_ID","" + rowID);
+        database.close();
+    }
+
+    public int updatePatient(HashMap<String, String> queryValues) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("name", queryValues.get("name"));
+        values.put("age", queryValues.get("age"));
+        values.put("disease", queryValues.get("disease"));
+
+        return database.update("patient", values, "patient_id" + " = ?", new String[] { queryValues.get("patient_id") });
+        //String updateQuery = "Update  words set txtWord='"+word+"' where txtWord='"+ oldWord +"'";
+        //Log.d(LOGCAT,updateQuery);
+        //database.rawQuery(updateQuery, null);
+        //return database.update("words", values, "txtWord  = ?", new String[] { word });
+    }
+
+    public void deletePatient(String id) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        String deleteQuery = "DELETE FROM  patient where patient_id='"+ id +"'";
+//        Log.d("query",deleteQuery);
+        database.execSQL(deleteQuery);
+    }
+    /******************************************************************************************************/
 
     @Override
     public synchronized void close() {

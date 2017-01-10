@@ -1,7 +1,9 @@
 package com.example.asif.databasecrud;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,19 +27,23 @@ public class MainActivity extends AppCompatActivity {
 
         final ListView listview = (ListView) findViewById(R.id.mainListView);
 
+        Log.e("Check","Opening the datbase to view records!");
         DBAdapter dbAdapter = new DBAdapter(this);
-        menulist=dbAdapter.getAllNames();
-//
+//        menulist = dbAdapter.getAllNames();
+
 //        Log.e("Check",""+menulist);
 
-        ArrayAdapter<String> arrAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menulist);
-        listview.setAdapter(arrAdapter);
+        PatientListAdapter pListAdapter = new PatientListAdapter(this, dbAdapter.getAllPatients());
+        listview.setAdapter(pListAdapter);
 
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Add button clicked", Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, "Add button clicked", Toast.LENGTH_LONG).show();
+                Intent intentAdd = new Intent(MainActivity.this, AddActivity.class);
+                startActivity(intentAdd);
+                finish();
             }
         });
 
