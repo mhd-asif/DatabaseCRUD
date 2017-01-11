@@ -114,8 +114,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public void deletePatient(String id) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM  patient where patient_id='"+ id +"'";
-//        Log.d("query",deleteQuery);
+        String deleteQuery = "DELETE FROM patient where patient_id='"+ id +"'";
+        Log.e("query", deleteQuery);
         database.execSQL(deleteQuery);
     }
     /******************************************************************************************************/

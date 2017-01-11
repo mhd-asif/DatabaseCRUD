@@ -30,7 +30,7 @@ public class PatientListAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int position) {
+    public ModelPatients getItem(int position) {
         return patientList.get(position);
     }
 

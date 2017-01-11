@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -25,8 +24,8 @@ public class AddActivity extends AppCompatActivity {
 
         final DataBaseHelper dbHelper = new DataBaseHelper(this);
 
-        etName = (EditText) findViewById(R.id.etName);
-        etAge = (EditText) findViewById(R.id.etAge);
+        etName = (EditText) findViewById(R.id.etUpdateName);
+        etAge = (EditText) findViewById(R.id.etUpdateAge);
         etDisease = (EditText) findViewById(R.id.etDisease);
         patientInfo = new HashMap<String, String>();
 
@@ -43,6 +42,7 @@ public class AddActivity extends AppCompatActivity {
                 dbHelper.insertPatient(patientInfo);
 
                 Intent intentMain = new Intent(AddActivity.this, MainActivity.class);
+                intentMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentMain);
                 finish();
             }

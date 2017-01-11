@@ -51,36 +51,35 @@ public class DBAdapter {
         mDbHelper.close();
     }
 
-   /* public ArrayList<NavDrawerItem> getDrawerImage() {
-
+    public ModelPatients getPatientInfo(String patientID) {
         open();
-        ArrayList<NavDrawerItem> values = new ArrayList<>();
-        Cursor result = mDb.query(false, "information",
-                new String[]{"image_name"}, null, null, null, null, null, null);
-        //int[] drawables = {R.drawable.family,R.drawable.reason,R.drawable.benefits,R.drawable.sexstudy,R.drawable.birthcontrol,R.drawable.pregnant,R.drawable.babycare};
+        ArrayList<ModelPatients> values = new ArrayList<>();
+        ModelPatients patientInfo = new ModelPatients();
+
+        Cursor result = mDb.query(false, "patient",
+                new String[]{"name", "age", "disease"}, "patient_id=?", new String[]{patientID}, null, null, null, null);
+
         if (result.moveToFirst()) {
-            do {
-                NavDrawerItem navDrawerItem = new NavDrawerItem();
-                navDrawerItem.setImage(result.getString(result.getColumnIndex("image_name")));
-                values.add(navDrawerItem);
-            } while (result.moveToNext());
-        } else {
-            return null;
+            patientInfo.setName(result.getString(result.getColumnIndex("name")));
+            patientInfo.setAge(result.getString(result.getColumnIndex("age")));
+            patientInfo.setDisease(result.getString(result.getColumnIndex("disease")));
         }
+
         close();
-        return values;
-    }*/
+        return patientInfo;
+    }
 
     public ArrayList<ModelPatients> getAllPatients() {
 
         open();
         ArrayList<ModelPatients> values = new ArrayList<>();
         Cursor result = mDb.query(false, "patient",
-                new String[]{"name", "age", "disease"}, null, null, null, null, null, null);
+                new String[]{"patient_id", "name", "age", "disease"}, null, null, null, null, null, null);
 
         if (result.moveToFirst()) {
             do {
                 ModelPatients patientRow = new ModelPatients();
+                patientRow.setPatient_id(result.getString(result.getColumnIndex("patient_id")));
                 patientRow.setName(result.getString(result.getColumnIndex("name")));
                 patientRow.setAge(result.getString(result.getColumnIndex("age")));
                 patientRow.setDisease(result.getString(result.getColumnIndex("disease")));
